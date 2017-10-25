@@ -95,11 +95,11 @@ context "Rabl::Builder" do
     context "when keys are camelized" do
       setup do
         Rabl.configuration.camelize_keys = true
-        builder(nil, { :attributes => [ { :name => :first_pets_name } ] })
+        builder(nil, { :attributes => [ { :name => :first_pets_name }], :node => [{ :name => :preferences, :block => lambda { |u| { has_visible_profile: true } } }] })
       end
       asserts "that the key is camelized" do
         topic.to_hash(User.new)
-      end.equivalent_to({ :firstPetsName => 'jack' })
+      end.equivalent_to({ :firstPetsName => 'jack', preferences: { hasVisibleProfile: true } })
       teardown do
         Rabl.configuration.camelize_keys = false
       end
@@ -108,11 +108,11 @@ context "Rabl::Builder" do
     context "when keys are camelized with upper case first letter" do
       setup do
         Rabl.configuration.camelize_keys = :upper
-        builder(nil, { :attributes => [ { :name => :first_pets_name } ] })
+        builder(nil, { :attributes => [ { :name => :first_pets_name }], :node => [{ :name => :preferences, :block => lambda { |u| { has_visible_profile: true } } }] })
       end
       asserts "that the key is camelized with upper case first letter" do
         topic.to_hash(User.new)
-      end.equivalent_to({ :FirstPetsName => 'jack' })
+      end.equivalent_to({ :FirstPetsName => 'jack', Preferences: { HasVisibleProfile: true } })
       teardown do
         Rabl.configuration.camelize_keys = false
       end
